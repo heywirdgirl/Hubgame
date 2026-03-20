@@ -1,0 +1,35 @@
+{
+  "entities": {
+    "Score": {
+      "title": "Score",
+      "description": "Represents a user's score in a specific game.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The unique ID of the user."
+        },
+        "gameSlug": {
+          "type": "string",
+          "description": "The slug of the game."
+        },
+        "score": {
+          "type": "integer",
+          "description": "The score achieved."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of the last update."
+        }
+      },
+      "required": ["userId", "gameSlug", "score", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/scores/{scoreId}": {
+      "schema": "Score",
+      "description": "Collection of game scores."
+    }
+  }
+}

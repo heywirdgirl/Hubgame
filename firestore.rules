@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isValidScore(data) {
+      return data.keys().hasAll(['userId', 'gameSlug', 'score', 'updatedAt']) &&
+             data.userId is string &&
+             data.gameSlug is string &&
+             data.score is int &&
+             data.updatedAt is string;
+    }
+
+    match /scores/{scoreId} {
+      // Allow reading scores (could be public for leaderboard)
+      allow read: if true;
+      
+      // Allow creating/updating if the user is the owner of the score
+      allow create: if isAuthenticated() && 
+                      request.resource.data.userId == request.auth.uid &&
+                      isValidScore(request.resource.data);
+                      
+      allow update: if isAuthenticated() && 
+                      resource.data.userId == request.auth.uid &&
+                      request.resource.data.userId == request.auth.uid &&
+                      isValidScore(request.resource.data);
+    }
+
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "name": "Mini-Game Portal",
+  "description": "A mobile-optimized shell for Godot 4 HTML5 games with Firebase and Zustand.",
+  "requestFramePermissions": []
+}
