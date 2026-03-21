@@ -6,27 +6,7 @@ import GameCard from '../components/GameCard';
 import { useGameStore } from '../stores/useGameStore';
 import { Trophy, Gamepad2, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
-
-const games = [
-  {
-    slug: 'puzzle-01',
-    title: 'Puzzle Quest',
-    thumbnail: 'https://picsum.photos/seed/puzzle/800/450',
-    description: 'A classic puzzle game to test your logic and strategy skills.',
-  },
-  {
-    slug: 'logic-02',
-    title: 'Logic Master',
-    thumbnail: 'https://picsum.photos/seed/logic/800/450',
-    description: 'Master the art of logic with this challenging brain teaser.',
-  },
-  {
-    slug: 'speed-03',
-    title: 'Speed Runner',
-    thumbnail: 'https://picsum.photos/seed/speed/800/450',
-    description: 'Test your reflexes and speed in this fast-paced action game.',
-  },
-];
+import { games } from '../lib/games';
 
 const HomePage: React.FC = () => {
   const { highScore } = useGameStore();
