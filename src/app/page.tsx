@@ -1,4 +1,7 @@
-import React from 'react';
+// Mini-Game Portal Homepage
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import GameCard from '../components/GameCard';
 import { useGameStore } from '../stores/useGameStore';
 import { Trophy, Gamepad2, Sparkles } from 'lucide-react';
@@ -27,6 +30,13 @@ const games = [
 
 const HomePage: React.FC = () => {
   const { highScore } = useGameStore();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return <div className="min-h-screen bg-black" />;
 
   return (
     <div className="min-h-screen bg-black text-white p-4 pb-20">

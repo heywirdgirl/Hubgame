@@ -1,20 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+'use client';
+
+import React, { useEffect, useState, use } from 'react';
+import { useRouter } from 'next/navigation';
 import { useGameStore } from '../../../stores/useGameStore';
 import { ChevronLeft, Trophy, Share2, Maximize2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-const GamePlayer: React.FC = () => {
-  const { slug } = useParams<{ slug: string }>();
-  const navigate = useNavigate();
+const GamePlayer = ({ params }: { params: Promise<{ slug: string }> }) => {
+  const { slug } = use(params);
+  const router = useRouter();
   const { setCurrentScore, setHighScore, highScore } = useGameStore();
   const [isLoading, setIsLoading] = useState(true);
   const [showScoreToast, setShowScoreToast] = useState(false);
   const [lastScore, setLastScore] = useState(0);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     const handleMessage = (event: MessageEvent) => {
-      // Security: In production, you should check event.origin
       if (event.data && event.data.type === 'SEND_SCORE') {
         const score = event.data.score;
         setLastScore(score);
@@ -32,8 +39,10 @@ const GamePlayer: React.FC = () => {
   }, [slug, setCurrentScore, setHighScore]);
 
   const handleBack = () => {
-    navigate(-1);
+    router.back();
   };
+
+  if (!mounted) return <div className="h-screen w-full bg-black" />;
 
   return (
     <div className="h-screen w-full bg-black flex flex-col overflow-hidden">

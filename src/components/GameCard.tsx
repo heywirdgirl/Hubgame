@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Play } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -17,7 +17,7 @@ const GameCard: React.FC<GameCardProps> = ({ title, slug, thumbnail, description
       whileTap={{ scale: 0.98 }}
       className="bg-zinc-900 rounded-2xl overflow-hidden border border-white/10 shadow-lg"
     >
-      <Link to={`/play/${slug}`} className="block">
+      <Link href={`/play/${slug}`} className="block">
         <div className="relative aspect-video overflow-hidden">
           <img
             src={thumbnail}
