@@ -8,3 +8,7 @@ coverage/
 *.log
 .env*
 !.env.example
+
+#Env local
+.env.local
+.env.*.local
