@@ -33,6 +33,13 @@ service cloud.firestore {
                       isValidScore(request.resource.data);
     }
 
+    match /games/{gameId} {
+      // Public read access for game directory
+      allow read, list: if true;
+      // Seed and admin writes: adjust for production security as needed
+      allow create, update, delete: if true;
+    }
+
     match /users/{userId} {
       allow read, write: if isOwner(userId);
     }
