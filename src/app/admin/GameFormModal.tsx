@@ -23,11 +23,13 @@ interface Props {
 function toSlug(str: string) {
   return str
     .toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // bỏ dấu tiếng Việt
     .replace(/đ/g, 'd')
-    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/[^a-z0-9\s]/g, ' ')   // ký tự đặc biệt → khoảng trắng
     .trim()
-    .replace(/\s+/g, '-');
+    .replace(/\s+/g, '-')           // khoảng trắng → dấu gạch
+    .replace(/-+/g, '-')            // nhiều gạch liên tiếp → 1 gạch
+    .replace(/^-|-$/g, '');         // bỏ gạch đầu/cuối
 }
 
 const CATEGORIES = ['Giải đố', 'Logic', 'Hành động', 'Arcade', 'Nhập vai', 'Thể thao', 'Chiến thuật', 'Giáo dục'];
