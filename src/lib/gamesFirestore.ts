@@ -92,16 +92,14 @@ export async function getGameById(id: string): Promise<Game | null> {
 // ──────────────────────────────────────────────
 export async function getAllGames(): Promise<GameSummary[]> {
   try {
+    // Chỉ where status — không orderBy nhiều field để tránh cần Composite Index
     const q = query(
       collection(db, GAMES_COLLECTION),
-      where('status', '==', 'published'),
-      orderBy('is_featured', 'desc'),
-      orderBy('stats.plays', 'desc')
+      where('status', '==', 'published')
     );
     const snap = await getDocs(q);
-    return snap.docs.map((d) => {
+    const games = snap.docs.map((d) => {
       const game = docToGame(d.id, d.data() as Record<string, unknown>);
-      // Chỉ trả về các trường cần thiết cho danh sách
       return {
         id: game.id,
         slug: game.slug,
@@ -114,6 +112,12 @@ export async function getAllGames(): Promise<GameSummary[]> {
         assets: game.assets,
         stats: game.stats,
       } satisfies GameSummary;
+    });
+
+    // Sort trên client: featured lên đầu → sau đó theo lượt chơi
+    return games.sort((a, b) => {
+      if (a.is_featured !== b.is_featured) return a.is_featured ? -1 : 1;
+      return (b.stats?.plays ?? 0) - (a.stats?.plays ?? 0);
     });
   } catch (err) {
     console.error('[getAllGames] error:', err);
